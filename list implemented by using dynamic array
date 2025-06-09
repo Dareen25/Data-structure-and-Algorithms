@@ -1,0 +1,152 @@
+
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+
+class list{
+private:
+    int *arr;
+    int size;
+    int length;
+public:
+    list(int sz){
+        size = sz;
+        arr = new int [size];
+        length = 0;
+    }
+    
+    bool isEmpty(){ 
+        // if length == 0 return true (true == !0) --> ! length
+        return !length;
+    }
+    
+    bool isFull(){
+        return length == size;
+    }
+    
+    int listSize (){
+        return size;
+    }
+    
+    int listLength(){
+        return length;
+    }
+    
+    void print(){
+        if(!isEmpty()){
+            cout << "list elements : ";
+            for(int i = 0 ; i < length; i++){
+                cout << arr[i] << " ";
+            }cout << endl;
+        }else cout << "list is empty.\n";
+    }
+    
+    bool isItemIsEqual(int index, int ele){
+        if(!isEmpty() && index>=0 && index<length){
+            return arr[index] == ele;
+        } return false;
+    }
+    
+    void insertAt(int index, int ele){
+        if(!isFull() && index >= 0 && index <= length)
+        {
+            for(int i = length; i>index ; i--){ // for right shifting
+                arr[i] = arr[i - 1];
+            }
+            arr[index] = ele;
+            length++;
+            
+        }else cout << "list is full.\n";
+    }
+    
+    void insertEnd(int ele){
+        if(!isFull()){
+            arr[length++] = ele;
+            
+        }else cout << "list is full.\n";
+    }
+    
+    void removeAt(int index){
+        if(!isEmpty() && index>=0 && index<length){
+            for(int i = index; i < length - 1; i++){ // for make left shifting 
+                arr[i] = arr[i + 1];
+             }length--;   // to del the last element
+        }else cout << "index is not valid or list is empty.\n";
+    }
+    
+    int retrieveAt(int index){
+        if(!isEmpty() && index >=0 && index<length)
+            return arr[index];
+        else return -1;
+    }
+    
+    void replaceAt (int index, int ele){
+        if(!isEmpty() && index >=0 && index<length)
+            arr[index] = ele;
+    }
+    
+    void clearlist(){
+        length  = 0;
+    }
+    
+    void insert(int val){
+        // insert a specific ele in the last index of the list = insertEnd()
+        if(!isFull())
+            arr[length++] = val;
+        else cout << "list is full.\n";
+    }
+    
+    bool search(int ele){
+        for(int i = 0 ; i < length; i++){
+            if(arr[i] == ele){
+                return true;
+            }
+        }return false;
+    }
+    
+    int searchindex(int ele){
+        for(int i = 0 ; i < length; i++){
+            if(arr[i] == ele){
+                return i;
+            }
+        }return -1;
+    }
+    
+    void removeEle(int ele){
+        // o(n) +  o(n) = o(n) :)
+        int index = searchindex(ele);// o(n)
+        if(index != -1)
+            removeAt(index); // o(n)
+        else cout << "Element is not found.\n";
+    }
+    
+    ~list(){
+        // to del the dynamic array form the heap
+        delete[]arr;
+    }
+};
+int main()
+{
+	list l(5);
+	l.insertEnd(10);
+	l.insertEnd(10);
+	l.insertEnd(10);
+	l.insertAt(3, 30);
+	l.removeAt(3);
+	l.insertAt(1, 50);
+	l.print();
+
+	cout << l.retrieveAt(0) << endl;
+	l.replaceAt(0, 40);
+	l.print();
+	cout << l.retrieveAt(0) << endl;
+	l.removeEle(40);
+// 	l.clearlist();
+// 	l.insertEnd(10);
+	cout << l.isFull() << endl;
+	cout << l.isEmpty() << endl;
+	l.print();
+	cout << "length = " << l.listLength() << endl;
+
+	return 0;
+}
