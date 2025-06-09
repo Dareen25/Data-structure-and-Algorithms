@@ -1,0 +1,98 @@
+#include <iostream>
+using namespace std;
+
+#define SIZE 5
+int circular_queue[SIZE];
+int front = -1;
+int rear = -1;
+
+bool isEmpty() {
+    return front == -1 && rear == -1;
+}
+
+bool isFull() {
+    if((front == rear + 1) || (front == 0 && rear == SIZE - 1)){
+        return true;
+    }else {
+        return false;
+    }
+}
+
+void enqueue(int val) {
+    if (isFull()) {
+        cout << "Queue is full." << endl;
+        return;
+    }
+
+    if(isEmpty()){   // first condition (isEmpty)
+        front ++;
+        circular_queue[++rear] = val;
+    }else if (rear != SIZE - 1){    // second condition (rear don't reached to the end)
+        circular_queue[++rear] = val;
+    }else {   // third condition (rear reached to the end)
+        rear = 0;
+        circular_queue[rear] = val;
+    }
+}
+
+void dequeue() {
+    if (isEmpty()) {
+        cout << "Queue is empty." << endl;
+        return;
+    }
+
+    if (front == rear) {  //the first condition(Only one element in the queue)
+        front = rear = -1;
+    } else {  // for the second condition (front != sz-1) and the third condition (front == sz -1)
+        front = (front + 1) % SIZE;
+    }
+}
+
+int peek() {
+    if (!isEmpty()) {
+        return circular_queue[front];
+    } else {
+        cout << "Queue is empty." << endl;
+        return -1;
+    }
+}
+
+void display() {
+    if (isEmpty()) {
+        cout << "Queue is empty." << endl;
+        return;
+    }
+
+    cout << "Queue elements: ";
+    if(front <= rear){
+        for(int i = front ; i <= rear; i++){
+            cout << circular_queue[i]<< " ";
+        }cout << endl;
+    }else{
+        for(int i = front; i < SIZE; i++){
+            cout << circular_queue[i]<< " ";
+        }for(int i = 0; i <= rear; i++){
+            cout << circular_queue[i] << " ";
+        }cout << endl;  
+    }
+}
+
+int main() {
+    enqueue(1);
+    enqueue(2);
+    enqueue(3);
+    enqueue(4);
+    enqueue(5);
+
+    display();
+
+    dequeue();
+    display();
+
+    enqueue(6);
+    display();
+
+    cout << "Peek = " << peek() << endl;
+
+    return 0;
+}
